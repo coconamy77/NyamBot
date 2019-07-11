@@ -10,8 +10,8 @@ from slack.web.classes import extract_json
 from slack.web.classes.blocks import ImageBlock, SectionBlock
 from slackeventsapi import SlackEventAdapter
 
-SLACK_TOKEN = 'xoxb-684597766369-679535522738-CmmCvgpli7d3Xk1jufU1dcsa'
-SLACK_SIGNING_SECRET = '0f919d227261d7679b226f85db3e39b7'
+# SLACK_TOKEN = 'xoxb-684597766369-679535522738-CmmCvgpli7d3Xk1jufU1dcsa'
+# SLACK_SIGNING_SECRET = '0f919d227261d7679b226f85db3e39b7'
 
 app = Flask(__name__)
 # /listening 으로 슬랙 이벤트를 받습니다.

@@ -32,33 +32,32 @@ def _crawl_food_best(text):
 
     # location = "강남역"
 
+    food = text
     # query = location + ' ' + food
-    # food = text
-    query = text
+    query = food
 
-    url = 'https://www.mangoplate.com/search/' + parse.quote(query)
+    url = 'https://www.diningcode.com/list.php?query=' + parse.quote(query)
     soup = BeautifulSoup(urllib.request.urlopen(url).read(), "html.parser")
     region = []
     menu = []
-    score = []
+    address = []
     keywords = []
-    for i in soup.find_all("ul", class_="list-restaurants"):
-        for j in i.find_all("h2", class_="title"): #가게 이름
-            region.append(j.get_text())
-        for j in i.find_all("p", class_="etc"): #종류
-            menu.append(j.get_text())
-        for j in i.find_all("strong", class_="point search_point"): #점수
-            score.append(j.get_text())
+    for ul_tag in soup.find_all("ul", class_="list"):
+        for span_tag in ul_tag.find_all("span", class_="btxt"): #가게 이름
+            region.append(span_tag.get_text())
+        for span_tag in ul_tag.find_all("span", class_="stxt"): #종류
+            menu.append(span_tag.get_text())
+        for span_tag in ul_tag.find_all("span", class_="ctxt"): #주소
+            address.append(span_tag.get_text())
 
     for i in range(0, len(region)):
-        keywords.append(region[i]+'\n'+menu[i]+'\n'+score[i]+'\n')
-    keywords= keywords[:3]
+        keywords.append(region[i]+'\n'+menu[i]+'\n'+address[2*i+1]+'\n')
+    keywords = keywords[:3]
 
-    print(keywords)
    # 한글 지원을 위해 앞에 unicode u를 붙혀준다.
    #  return u'\n'.join(keywords), location
-    return u'\n'.join(keywords)
-
+   #  return u'\n'.join(keywords)
+    return query + ' 맛집 BEST 3은 \n' + u'\n'.join(keywords) + '\n이다냠'
 
 # 챗봇이 멘션을 받았을 경우
 @slack_events_adaptor.on("app_mention")
