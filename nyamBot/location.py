@@ -39,15 +39,15 @@ def _crawl_food_best(text):
 
     url = 'https://www.diningcode.com/list.php?query=' + parse.quote(query)
     soup = BeautifulSoup(urllib.request.urlopen(url).read(), "html.parser")
-    region = []
+    name = []
     menu = []
     address = []
-    keywords = []
     pics = []
+    keywords = []
 
     for ul_tag in soup.find_all("ul", class_="list"):
         for span_tag in ul_tag.find_all("span", class_="btxt"): #가게 이름
-            region.append(span_tag.get_text())
+            name.append(span_tag.get_text())
         for span_tag in ul_tag.find_all("span", class_="stxt"): #종류
             menu.append(span_tag.get_text())
         for span_tag in ul_tag.find_all("span", class_="ctxt"): #주소
@@ -58,7 +58,7 @@ def _crawl_food_best(text):
     blocks=[]
     for i in range(0,3):
         block1 = ImageBlock(image_url=pics[i], alt_text="이미지가안뜰때보이는문구")
-        keywords.append(region[i] + '\n' + menu[i] + '\n' + address[2 * i + 1] + '\n')
+        keywords.append(name[i] + '\n' + menu[i] + '\n' + address[2 * i + 1] + '\n')
         block2 = SectionBlock(text=keywords[i])
         blocks.append(block1)
         blocks.append(block2)
