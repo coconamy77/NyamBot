@@ -17,8 +17,8 @@ from nyamBot.bob_worldcup import worldcup
 from nyamBot.first_recommendation import first_recom
 from nyamBot.search_restaurants import crawl_three_restaurant, crawl_one_restaurant
 
-SLACK_TOKEN = 'xoxb-684597766369-679535522738-0JR0JhzKcHNhVoTzKOm8BbFI'
-SLACK_SIGNING_SECRET = '0f919d227261d7679b226f85db3e39b7'
+SLACK_TOKEN = ?
+SLACK_SIGNING_SECRET = ?
 
 app = Flask(__name__)
 # /listening 으로 슬랙 이벤트를 받습니다.
