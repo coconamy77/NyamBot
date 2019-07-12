@@ -12,13 +12,14 @@ from slack.web.classes import extract_json
 from slack.web.classes.blocks import ImageBlock, SectionBlock
 from slackeventsapi import SlackEventAdapter
 
+from nyamBot.search_restaurants import crawl_three_restaurant, crawl_one_restaurant
+
 
 def first_recom(text):
     blocks = []
     if '메뉴' in text:
         food_and_location = text.split()[2:]
-        blocks.append(SectionBlock(text="오늘은 이 메뉴 어떠냠 주변 식당 알고 싶으면 `~<메뉴이름> <위치>`, 별로면 `~다시추천`, "
-                                   "고르고 싶다면 `~선택`이라고 입력해보겠냠"))
+        blocks.append(crawl_one_restaurant(food_and_location))
     elif '선택' in text:
         block = SectionBlock(text="선택을 선택했구냠!! 너의 취향에 따라 메뉴를 추천해줄테니 골라보겠느냠!\n"
                                    "먼저 기준을 골라보겠냠?\n"
@@ -31,40 +32,42 @@ def first_recom(text):
         blocks.append(block)
     elif '날씨' in text:
         if len(text.split()) < 3 or text.split()[2]=="":
-            blocks.append(SectionBlock(text="`~날씨 <키워드>` 형식으로 입력해보겠냠 키워드는 "))
+            blocks.append(SectionBlock(text="`~날씨 <키워드>` 형식으로 입력해보겠냠 키워드는 *비오는 날, 여름, 겨울 등*으로 해보겠냠"))
         else:
-            blocks.append(SectionBlock(text="날씨 띄어쓰기 하, "
-                                            "고르고 싶다면 `~선택`이라고 입력해보겠냠"))
+            food = text.split()[2]
+            blocks.append(crawl_one_restaurant(food))
+
     elif '분위기' in text:
         if len(text.split()) < 3 or text.split()[2]=="":
-            blocks.append(SectionBlock(text="`~분위기 <키워드>` 형식으로 입력해보겠냠 키워드는 "))
+            blocks.append(SectionBlock(text="`~분위기 <키워드>` 형식으로 입력해보겠냠 키워드는 *고급, 조용한, 예쁜 등*으로 해보겠냠"))
         else:
-            blocks.append(SectionBlock(text="날씨 띄어쓰기 하, "
-                                            "고르고 싶다면 `~선택`이라고 입력해보겠냠"))
+            food = text.split()[2:]
+            blocks.append(crawl_one_restaurant(food))
 
     elif '방문목적' in text:
         if len(text.split()) < 3 or text.split()[2]=="":
-            blocks.append(SectionBlock(text="`~방문목적 <키워드>` 형식으로 입력해보겠냠 키워드는 "))
+            blocks.append(SectionBlock(text="`~방문목적 <키워드>` 형식으로 입력해보겠냠 키워드는 *회식, 데이트, 가족외식, 기념일 등*으로 해보겠냠"))
         else:
-            blocks.append(SectionBlock(text="날씨 띄어쓰기 하, "
-                                            "고르고 싶다면 `~선택`이라고 입력해보겠냠"))
+            food = text.split()[2:]
+            blocks.append(crawl_one_restaurant(food))
 
     elif '편의시설' in text:
         if len(text.split()) < 3 or text.split()[2]=="":
-            blocks.append(SectionBlock(text="`~편의시설 <키워드>` 형식으로 입력해보겠냠 키워드는 "))
+            blocks.append(SectionBlock(text="`~편의시설 <키워드>` 형식으로 입력해보겠냠 키워드는 *무료주차, 발렛주차, 24시간 등*으로 해보겠냠"))
         else:
-            blocks.append(SectionBlock(text="날씨 띄어쓰기 하, "
-                                            "고르고 싶다면 `~선택`이라고 입력해보겠냠"))
+            food = text.split()[2:]
+            blocks.append(crawl_one_restaurant(food))
 
     elif '인싸맛집' in text:
         if len(text.split()) < 3 or text.split()[2]=="":
-            blocks.append(SectionBlock(text="`~인싸맛집 <키워드>` 형식으로 입력해보겠냠 키워드는 "))
+            blocks.append(SectionBlock(text="`~인싸맛집 <키워드>` 형식으로 입력해보겠냠 키워드는 *수요미식회, 백종원의3대천왕, 생활의달인 등*으로 해보겠냠"))
         else:
-            blocks.append(SectionBlock(text="날씨 띄어쓰기 하, "
-                                            "고르고 싶다면 `~선택`이라고 입력해보겠냠"))
+            food = text.split()[2:]
+            blocks.append(crawl_one_restaurant(food))
     else:
-        blocks.append(SectionBlock(text="오늘은 이 메뉴 어떠냠 주변 식당 알고 싶으면 `~<메뉴이름> <위치>`, 별로면 `~다시추천`, "
-                                        "고르고 싶다면 `~선택`이라고 입력해보겠냠"))
+
+        blocks.append(SectionBlock(text="`@<봇이름> 냠냠`으로 시작하면 안되냠. 이유는 없다 그냥 귀엽지않냠"))
+
 
     return blocks
 
