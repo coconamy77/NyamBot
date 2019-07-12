@@ -14,6 +14,7 @@ from slackeventsapi import SlackEventAdapter
 
 from nyamBot.bob_worldcup import worldcup
 from nyamBot.first_recommendation import first_recom
+from nyamBot.location import _crawl_food_best
 
 SLACK_TOKEN = 'xoxb-684597766369-679535522738-KefPJIzqi0EDCa4PHW6UuTBT'
 SLACK_SIGNING_SECRET = '0f919d227261d7679b226f85db3e39b7'
@@ -37,10 +38,11 @@ def main_question(text):
                 food_line += line.replace("\n", ",")
             food_list=food_line.strip().split(",")[:-1]
         food = food_list[random.randrange(1, len(food_list))]
-        block1 = ImageBlock(image_url="https://mp-seoul-image-production-s3.mangoplate.com/46971_1429020571192?fit=around|359:240&crop=359:240;*,*&output-format=jpg&output-quality=80",alt_text="이미지가 안뜬다냠... ㅠㅠ미안하다냠...")
-        block2 = SectionBlock(text = "오늘은 여기서 *"+food+"* 어떠냠? 별로면 `~다시추천`, 원하는 메뉴 식당 알고 싶으면 `~메뉴 <메뉴이름> <위치>`, "
-                                     ", 너도 모르는 너가 원하는 메뉴를 알고 싶다면 `!이상밥월드컵`, 키워드로 고르고 싶다면 `~선택`이라고 입력해주겠냠")
-        blocks = [block1, block2]
+        blocks = _crawl_food_best(food+" 역삼역")
+        # block1 = ImageBlock(image_url="https://mp-seoul-image-production-s3.mangoplate.com/46971_1429020571192?fit=around|359:240&crop=359:240;*,*&output-format=jpg&output-quality=80",alt_text="이미지가 안뜬다냠... ㅠㅠ미안하다냠...")
+        blocks.append(SectionBlock(text = "오늘은 여기서 *"+food+"* 어떠냠? 별로면 `~다시추천`, 원하는 메뉴 식당 알고 싶으면 `~메뉴 <메뉴이름> <위치>`, "
+                                     "너도 모르는 너가 원하는 메뉴를 알고 싶다면 `!이상밥월드컵`, 키워드로 고르고 싶다면 `~선택`이라고 입력해주겠냠"))
+        #blocks = [block1, block2]
 
     elif '!이상밥월드컵' in text:
         blocks = worldcup(text)
